@@ -182,6 +182,8 @@ public class PiglinVenatorEntity extends AbstractPiglinEntity implements Crossbo
     @Override
     protected void onKilledBy(@Nullable LivingEntity adversary) {
         //Checks if venator rides on the captive hoglin, if so. It'll gives the blessing effect to the player
+
+        //This can be iterated into memory modules if effects does not fit to your liking
         if (adversary instanceof PlayerEntity player && this.hasVehicle() && this.getVehicle() instanceof HoglinEntity hoglinEntity && ((ICaptive)hoglinEntity).isCaptive()) {
             player.addStatusEffect(new StatusEffectInstance(VividStatusEffects.HOGLIN_BLESSING, 36000));
         }
