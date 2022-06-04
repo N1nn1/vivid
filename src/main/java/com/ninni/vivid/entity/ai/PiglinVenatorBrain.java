@@ -32,17 +32,17 @@ import java.util.Optional;
 
 public class PiglinVenatorBrain {
 
-    public static Brain<?> create(PiglinVenatorEntity piglinBrute, Brain<PiglinVenatorEntity> brain) {
-        PiglinVenatorBrain.addCoreActivities(piglinBrute, brain);
-        PiglinVenatorBrain.addIdleActivities(piglinBrute, brain);
-        PiglinVenatorBrain.addFightActivities(piglinBrute, brain);
+    public static Brain<?> create(PiglinVenatorEntity piglinVenator, Brain<PiglinVenatorEntity> brain) {
+        PiglinVenatorBrain.addCoreActivities(piglinVenator, brain);
+        PiglinVenatorBrain.addIdleActivities(piglinVenator, brain);
+        PiglinVenatorBrain.addFightActivities(piglinVenator, brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
         brain.resetPossibleActivities();
         return brain;
     }
 
-    private static void addCoreActivities(PiglinVenatorEntity piglinBrute, Brain<PiglinVenatorEntity> brain) {
+    private static void addCoreActivities(PiglinVenatorEntity piglinVenator, Brain<PiglinVenatorEntity> brain) {
         brain.setTaskList(Activity.CORE, 0, ImmutableList.of(
                 new LookAroundTask(45, 90),
                 new WanderAroundTask(),
@@ -51,7 +51,7 @@ public class PiglinVenatorBrain {
         ));
     }
 
-    private static void addIdleActivities(PiglinVenatorEntity piglinBrute, Brain<PiglinVenatorEntity> brain) {
+    private static void addIdleActivities(PiglinVenatorEntity piglinVenator, Brain<PiglinVenatorEntity> brain) {
         brain.setTaskList(Activity.IDLE, 10, ImmutableList.of(
                 new UpdateAttackTargetTask<>(PiglinVenatorBrain::getTarget),
                 PiglinVenatorBrain.method_30244(),
@@ -60,9 +60,9 @@ public class PiglinVenatorBrain {
         );
     }
 
-    private static void addFightActivities(PiglinVenatorEntity piglinBrute, Brain<PiglinVenatorEntity> brain) {
+    private static void addFightActivities(PiglinVenatorEntity piglinVenator, Brain<PiglinVenatorEntity> brain) {
         brain.setTaskList(Activity.FIGHT, 10, ImmutableList.of(
-                new ForgetAttackTargetTask<>(livingEntity -> !PiglinVenatorBrain.isTarget(piglinBrute, livingEntity)),
+                new ForgetAttackTargetTask<>(livingEntity -> !PiglinVenatorBrain.isTarget(piglinVenator, livingEntity)),
                 new RangedApproachTask(1.0f),
                 new MeleeAttackTask(20),
                 new NonGenericCrossbowAttackTask()
@@ -84,15 +84,15 @@ public class PiglinVenatorBrain {
                 Pair.of(FindEntityTask.create(EntityType.PIGLIN, 8, MemoryModuleType.INTERACTION_TARGET, 0.6f, 2), 2), Pair.of(FindEntityTask.create(EntityType.PIGLIN_BRUTE, 8, MemoryModuleType.INTERACTION_TARGET, 0.6f, 2), 2), Pair.of(new GoToNearbyPositionTask(MemoryModuleType.HOME, 0.6f, 2, 100), 2), Pair.of(new GoToIfNearbyTask(MemoryModuleType.HOME, 0.6f, 5), 2), Pair.of(new WaitTask(30, 60), 1)));
     }
 
-    public static void tick(PiglinVenatorEntity piglinBrute) {
-        Brain<PiglinVenatorEntity> brain = piglinBrute.getBrain();
+    public static void tick(PiglinVenatorEntity piglinVenator) {
+        Brain<PiglinVenatorEntity> brain = piglinVenator.getBrain();
         Activity activity = brain.getFirstPossibleNonCoreActivity().orElse(null);
         brain.resetPossibleActivities(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
         Activity activity2 = brain.getFirstPossibleNonCoreActivity().orElse(null);
         if (activity != activity2) {
-            PiglinVenatorBrain.playSoundIfAngry(piglinBrute);
+            PiglinVenatorBrain.playSoundIfAngry(piglinVenator);
         }
-        piglinBrute.setAttacking(brain.hasMemoryModule(MemoryModuleType.ATTACK_TARGET));
+        piglinVenator.setAttacking(brain.hasMemoryModule(MemoryModuleType.ATTACK_TARGET));
     }
 
     private static boolean isTarget(AbstractPiglinEntity piglin, LivingEntity entity) {
@@ -115,16 +115,16 @@ public class PiglinVenatorBrain {
         return piglin.getBrain().getOptionalMemory(memoryModuleType).filter(livingEntity -> livingEntity.isInRange(piglin, 12.0));
     }
 
-    public static void playSoundRandomly(PiglinVenatorEntity piglinBrute) {
-        if ((double)piglinBrute.world.random.nextFloat() < 0.0125) {
-            PiglinVenatorBrain.playSoundIfAngry(piglinBrute);
+    public static void playSoundRandomly(PiglinVenatorEntity piglinVenator) {
+        if ((double)piglinVenator.world.random.nextFloat() < 0.0125) {
+            PiglinVenatorBrain.playSoundIfAngry(piglinVenator);
         }
     }
 
-    private static void playSoundIfAngry(PiglinVenatorEntity piglinBrute) {
-        piglinBrute.getBrain().getFirstPossibleNonCoreActivity().ifPresent(activity -> {
+    private static void playSoundIfAngry(PiglinVenatorEntity piglinVenator) {
+        piglinVenator.getBrain().getFirstPossibleNonCoreActivity().ifPresent(activity -> {
             if (activity == Activity.FIGHT) {
-                piglinBrute.playAngrySound();
+                piglinVenator.playAngrySound();
             }
         });
     }
