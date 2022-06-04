@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 
+//The other crossbow attack task uses generics which makes it incompatible with the setTaskList method. If you check the hoglin AI brain, it'll show an error 
 public class NonGenericCrossbowAttackTask extends Task<MobEntity> {
     private int chargingCooldown;
     private NonGenericCrossbowAttackTask.CrossbowState state = NonGenericCrossbowAttackTask.CrossbowState.UNCHARGED;
