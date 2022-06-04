@@ -10,10 +10,11 @@ import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.AnimalModel;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.util.math.MathHelper;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class PiglinVenatorEntityModel extends AnimalModel<PiglinVenatorEntity> {
+public class PiglinVenatorEntityModel extends PlayerEntityModel<PiglinVenatorEntity> {
     private final ModelPart root;
 
     private final ModelPart R_Leg;
@@ -34,6 +35,7 @@ public class PiglinVenatorEntityModel extends AnimalModel<PiglinVenatorEntity> {
     private final ModelPart L_Chains;
 
     public PiglinVenatorEntityModel(ModelPart root) {
+        super(root, false);
         this.root = root;
 
         this.Torso         = root.getChild("Torso");
@@ -57,7 +59,7 @@ public class PiglinVenatorEntityModel extends AnimalModel<PiglinVenatorEntity> {
     }
 
     public static TexturedModelData getTexturedModelData() {
-        ModelData data = new ModelData();
+        ModelData data = PlayerEntityModel.getTexturedModelData(Dilation.NONE, false);
         ModelPartData root = data.getRoot();
 
         ModelPartData R_Leg = root.addChild(
@@ -225,8 +227,23 @@ public class PiglinVenatorEntityModel extends AnimalModel<PiglinVenatorEntity> {
     }
 
     @Override
-    protected Iterable<ModelPart> getHeadParts() { return ImmutableList.of(); }
+    protected Iterable<ModelPart> getHeadParts() { return ImmutableList.of(this.head); }
 
     @Override
-    protected Iterable<ModelPart> getBodyParts() { return ImmutableList.of(); }
+    protected Iterable<ModelPart> getBodyParts() { return ImmutableList.of(
+            this.body,
+            this.rightArm,
+            this.leftArm,
+            this.rightLeg,
+            this.leftLeg,
+            this.hat,
+            this.R_Leg,
+            this.L_Leg,
+            this.R_Arm,
+            this.L_Arm,
+            this.L_Arm_Layer,
+            this.R_Arm_Layer,
+            this.Torso,
+            this.Torso_Layer);
+    }
 }
