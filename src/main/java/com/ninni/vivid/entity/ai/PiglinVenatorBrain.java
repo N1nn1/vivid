@@ -4,14 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.ninni.vivid.entity.PiglinVenatorEntity;
-import com.ninni.vivid.mixin.PiglinBrainAccessor;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.task.CrossbowAttackTask;
 import net.minecraft.entity.ai.brain.task.FindEntityTask;
 import net.minecraft.entity.ai.brain.task.FindInteractionTargetTask;
 import net.minecraft.entity.ai.brain.task.FollowMobTask;
@@ -115,18 +113,6 @@ public class PiglinVenatorBrain {
 
     private static Optional<? extends LivingEntity> method_30249(AbstractPiglinEntity piglin, MemoryModuleType<? extends LivingEntity> memoryModuleType) {
         return piglin.getBrain().getOptionalMemory(memoryModuleType).filter(livingEntity -> livingEntity.isInRange(piglin, 12.0));
-    }
-
-    protected static void tryRevenge(PiglinVenatorEntity piglinBrute, LivingEntity target) {
-        if (target instanceof AbstractPiglinEntity) {
-            return;
-        }
-        PiglinBrainAccessor.callTryRevenge(piglinBrute, target);
-    }
-
-    protected static void setTarget(PiglinVenatorEntity piglinBrute, LivingEntity target) {
-        piglinBrute.getBrain().forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
-        piglinBrute.getBrain().remember(MemoryModuleType.ANGRY_AT, target.getUuid(), 600L);
     }
 
     public static void playSoundRandomly(PiglinVenatorEntity piglinBrute) {
