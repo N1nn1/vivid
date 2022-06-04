@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "HoglinEntityMixin",
+    "NearestPlayersSensorMixin",
     "client.HoglinEntityRendererMixin"
   ],
   "client": [

@@ -1,6 +1,7 @@
 package com.ninni.vivid;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.vivid.effects.VividStatusEffects;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
@@ -16,5 +17,6 @@ public class Vivid implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Reflection.initialize();
+		VividStatusEffects.init();
 	}
 }

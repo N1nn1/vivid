@@ -2,6 +2,8 @@ package com.ninni.vivid.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
+import com.ninni.vivid.api.ICaptive;
+import com.ninni.vivid.effects.VividStatusEffects;
 import com.ninni.vivid.entity.ai.PiglinVenatorBrain;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CrossbowUser;
@@ -19,8 +21,12 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.AbstractPiglinEntity;
+import net.minecraft.entity.mob.HoglinEntity;
 import net.minecraft.entity.mob.PiglinActivity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -171,5 +177,14 @@ public class PiglinVenatorEntity extends AbstractPiglinEntity implements Crossbo
         if (!this.world.isClient()) {
             System.out.println(this.getMainHandStack());
         }
+    }
+
+    @Override
+    protected void onKilledBy(@Nullable LivingEntity adversary) {
+        //Checks if venator rides on the captive hoglin, if so. It'll gives the blessing effect to the player
+        if (adversary instanceof PlayerEntity player && this.hasVehicle() && this.getVehicle() instanceof HoglinEntity hoglinEntity && ((ICaptive)hoglinEntity).isCaptive()) {
+            player.addStatusEffect(new StatusEffectInstance(VividStatusEffects.HOGLIN_BLESSING, 36000));
+        }
+        super.onKilledBy(adversary);
     }
 }
